@@ -492,9 +492,9 @@ def sell_coins():
         SL = float(coins_bought[coin]['bought_at']) + (float(coins_bought[coin]['bought_at']) * coins_bought[coin]['stop_loss']) / 100
         #
         lastPrice = float(last_price[coin]['price'])
-        sellFee = (coins_bought[coin]['volume'] * lastPrice) * (TRADING_FEE/100)
+        sellFee = lastPrice * (TRADING_FEE/100)
         buyPrice = float(coins_bought[coin]['bought_at'])
-        buyFee = (coins_bought[coin]['volume'] * buyPrice) * (TRADING_FEE/100)
+        buyFee = buyPrice * (TRADING_FEE/100)
         priceChange = float((lastPrice - buyPrice) / buyPrice * 100)
         priceChangeWithFee = float(((lastPrice - buyPrice) - (sellFee + buyFee) ) / buyPrice * 100)
         #
@@ -550,7 +550,7 @@ def sell_coins():
                 volatility_cooloff[coin] = datetime.now()
 
                 # Log trade
-                profit = ((lastPrice - buyPrice) * coins_sold[coin]['volume']) - (buyFee + sellFee)
+                profit = ((((1-(TRADING_FEE/100)) * lastPrice) - ((1+(TRADING_FEE/100)) * buyPrice)) * coins_sold[coin]['volume'])
 
                 #gogo MOD to trigger trade lost or won and to count lost or won trades
                 if profit > 0:
